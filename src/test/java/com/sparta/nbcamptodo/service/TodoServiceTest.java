@@ -55,4 +55,27 @@ class TodoServiceTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
+    @Test
+    void 상세_조회_테스트() {
+        // 회원가입
+        SignRequestDto signDto = new SignRequestDto("user1", "1234");
+        userService.signup(signDto);
+
+        // 유저 갖고 오기
+        User user = userRepository.findByUsername(signDto.getUsername()).get();
+
+        // 할 일 작성
+        TodoRequestDto requestDto = new TodoRequestDto("제목", "내용");
+        TodoResponseDto todoResponseDto = todoService.createTodo(requestDto, user);
+
+        // 작성한 할 일 갖고 오기
+        TodoResponseDto todo = todoService.getTodo(todoResponseDto.getId());
+
+        // 작성한 것과 갖고온 것이 같은지 확인 해보기
+        assertThat(todo.getTitle()).isEqualTo(todoResponseDto.getTitle());
+        assertThat(todo.getUsername()).isEqualTo(todoResponseDto.getUsername());
+        assertThat(todo.getId()).isEqualTo(todoResponseDto.getId());
+        assertThat(todo.getContent()).isEqualTo(todoResponseDto.getContent());
+    }
+
 }
