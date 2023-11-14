@@ -1,6 +1,5 @@
 package com.sparta.nbcamptodo.entity;
 
-import com.sparta.nbcamptodo.dto.LoginRequestDto;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

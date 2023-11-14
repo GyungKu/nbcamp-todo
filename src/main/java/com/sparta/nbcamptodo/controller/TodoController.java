@@ -1,10 +1,9 @@
 package com.sparta.nbcamptodo.controller;
 
 import com.sparta.nbcamptodo.dto.GlobalResponseDto;
+import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.dto.TodoResponseDto;
-import com.sparta.nbcamptodo.dto.LoginRequestDto;
-import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.security.UserDetailsImpl;
 import com.sparta.nbcamptodo.service.TodoService;
 import jakarta.validation.Valid;
@@ -12,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -31,8 +32,15 @@ public class TodoController {
     @GetMapping("/todo/{todoId}")
     public ResponseEntity<GlobalResponseDto> getTodo(@PathVariable Long todoId) {
         TodoResponseDto responseDto = todoService.getTodo(todoId);
-        GlobalResponseDto<TodoResponseDto> response = new GlobalResponseDto<>("success", responseDto);
-        return ResponseEntity.status(CREATED).body(response);
+        GlobalResponseDto<TodoResponseDto> response = new GlobalResponseDto<>("todo", responseDto);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/todoList")
+    public ResponseEntity<GlobalResponseDto> getTodoList() {
+        List<TodoListResponseDto> responseDto = todoService.getTodoList();
+        GlobalResponseDto<List<TodoListResponseDto>> todoList = new GlobalResponseDto<>("todoList", responseDto);
+        return ResponseEntity.ok(todoList);
     }
 
 }
