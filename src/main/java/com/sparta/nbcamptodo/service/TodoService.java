@@ -20,4 +20,10 @@ public class TodoService {
         Todo todo = todoRepository.save(new Todo(requestDto, user));
         return new TodoResponseDto(todo);
     }
+
+    public TodoResponseDto getTodo(Long todoId) {
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 할 일 입니다."));
+        TodoResponseDto responseDto = new TodoResponseDto(todo);
+        return responseDto;
+    }
 }
