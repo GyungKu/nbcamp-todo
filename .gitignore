@@ -19,6 +19,7 @@ bin/
 
 ### IntelliJ IDEA ###
 application-datasource.properties
+application-secretkey.properties
 
 .idea
 *.iws
