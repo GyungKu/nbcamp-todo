@@ -1,11 +1,16 @@
 package com.sparta.nbcamptodo.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String content;
@@ -16,4 +21,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Todo todo;
 
+    public Comment(String content, User user, Todo todo) {
+        this.content = content;
+        this.user = user;
+        this.todo = todo;
+        todo.getComments().add(this);
+    }
 }
