@@ -28,11 +28,27 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
-        if (comment.getUser().getId() != user.getId()) {
-            throw new IllegalArgumentException("본인의 댓글만 수정이 가능합니다.");
-        }
+        Comment comment = findComment(commentId);
+        userValidation(user.getId(), comment.getUser().getId());
         comment.update(requestDto.getContent());
         return new CommentResponseDto(comment);
+    }
+
+    public void deleteComment(Long commentId, User user) {
+        Comment comment = findComment(commentId);
+        userValidation(user.getId(), comment.getUser().getId());
+        comment.delete();
+        commentRepository.delete(comment);
+    }
+
+    private static void userValidation(Long userId, Long commentUserId) {
+        if (commentUserId != userId) {
+            throw new IllegalArgumentException("본인의 댓글만 수정이 가능합니다.");
+        }
+    }
+
+    private Comment findComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
+        return comment;
     }
 }

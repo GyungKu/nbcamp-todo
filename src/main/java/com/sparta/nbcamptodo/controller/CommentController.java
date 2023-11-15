@@ -31,5 +31,11 @@ public class CommentController {
         CommentResponseDto responseDto = commentService.updateComment(commentId, requestDto, userDetails.getUser());
         return ResponseEntity.ok(new GlobalResponseDto("수정 성공", responseDto));
     }
+
+    @DeleteMapping("/todo/comment/{commentId}")
+    public ResponseEntity<GlobalResponseDto> deleteComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        commentService.deleteComment(commentId, userDetails.getUser());
+        return ResponseEntity.ok(new GlobalResponseDto("성공", "데이터 삭제 성공"));
+    }
 }
 

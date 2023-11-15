@@ -31,4 +31,8 @@ public class Comment {
     public void update(String content) {
         this.content = content;
     }
+
+    public void delete() {
+        todo.getComments().remove(this);
+    }
 }
