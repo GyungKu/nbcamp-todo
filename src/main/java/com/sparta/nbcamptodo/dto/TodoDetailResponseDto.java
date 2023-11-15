@@ -6,17 +6,19 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class TodoResponseDto {
+public class TodoDetailResponseDto {
 
     private Long id;
     private String title;
+    private String content;
     private String username;
     private Boolean complete;
     private LocalDateTime createAt;
 
-    public TodoResponseDto(Todo todo) {
+    public TodoDetailResponseDto(Todo todo) {
         this.id = todo.getId();
         this.title = todo.getTitle();
+        this.content = todo.getContent();
         this.username = todo.getUser().getUsername();
         this.complete = todo.getComplete();
         this.createAt = todo.getCreateAt();

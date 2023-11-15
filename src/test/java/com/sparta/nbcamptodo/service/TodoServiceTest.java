@@ -2,8 +2,7 @@ package com.sparta.nbcamptodo.service;
 
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
-import com.sparta.nbcamptodo.dto.TodoResponseDto;
-import com.sparta.nbcamptodo.dto.LoginRequestDto;
+import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -31,7 +30,7 @@ class TodoServiceTest {
         userService.signup(signDto);
         User user = userRepository.findByUsername(signDto.getUsername()).get();
         TodoRequestDto requestDto = new TodoRequestDto("제목", "내용");
-        TodoResponseDto todo = todoService.createTodo(requestDto, user);
+        TodoDetailResponseDto todo = todoService.createTodo(requestDto, user);
 
         assertThat(todo.getTitle()).isEqualTo(requestDto.getTitle());
         assertThat(todo.getContent()).isEqualTo(requestDto.getContent());
@@ -66,16 +65,16 @@ class TodoServiceTest {
 
         // 할 일 작성
         TodoRequestDto requestDto = new TodoRequestDto("제목", "내용");
-        TodoResponseDto todoResponseDto = todoService.createTodo(requestDto, user);
+        TodoDetailResponseDto todoDetailResponseDto = todoService.createTodo(requestDto, user);
 
         // 작성한 할 일 갖고 오기
-        TodoResponseDto todo = todoService.getTodo(todoResponseDto.getId());
+        TodoDetailResponseDto todo = todoService.getTodo(todoDetailResponseDto.getId());
 
         // 작성한 것과 갖고온 것이 같은지 확인 해보기
-        assertThat(todo.getTitle()).isEqualTo(todoResponseDto.getTitle());
-        assertThat(todo.getUsername()).isEqualTo(todoResponseDto.getUsername());
-        assertThat(todo.getId()).isEqualTo(todoResponseDto.getId());
-        assertThat(todo.getContent()).isEqualTo(todoResponseDto.getContent());
+        assertThat(todo.getTitle()).isEqualTo(todoDetailResponseDto.getTitle());
+        assertThat(todo.getUsername()).isEqualTo(todoDetailResponseDto.getUsername());
+        assertThat(todo.getId()).isEqualTo(todoDetailResponseDto.getId());
+        assertThat(todo.getContent()).isEqualTo(todoDetailResponseDto.getContent());
     }
 
 }

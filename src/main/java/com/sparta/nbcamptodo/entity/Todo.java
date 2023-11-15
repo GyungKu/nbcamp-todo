@@ -43,4 +43,8 @@ public class Todo {
         this.title = title;
         this.content = content;
     }
+
+    public void completed(Boolean complete) {
+        this.complete = complete;
+    }
 }
