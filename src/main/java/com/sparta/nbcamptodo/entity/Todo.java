@@ -38,4 +38,9 @@ public class Todo {
         this.user = user;
         complete = false;
     }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

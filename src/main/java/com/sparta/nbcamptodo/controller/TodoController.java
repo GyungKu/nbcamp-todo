@@ -43,4 +43,10 @@ public class TodoController {
         return ResponseEntity.ok(todoList);
     }
 
+    @PatchMapping("/todo/{todoId}")
+    public ResponseEntity<GlobalResponseDto> updateTodo(@PathVariable Long todoId, @RequestBody TodoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        TodoResponseDto responseDto = todoService.updateTodo(todoId, requestDto, userDetails.getUser());
+        GlobalResponseDto<TodoResponseDto> response = new GlobalResponseDto<>("수정", responseDto);
+        return ResponseEntity.ok(response);
+    }
 }
