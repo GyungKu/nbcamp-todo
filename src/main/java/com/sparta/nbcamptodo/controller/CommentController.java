@@ -26,5 +26,10 @@ public class CommentController {
         return ResponseEntity.status(CREATED).body(new GlobalResponseDto("댓글 생성 성공", responseDto));
     }
 
+    @PatchMapping("/todo/comment/{commentId}")
+    public ResponseEntity<GlobalResponseDto> updateComment(@PathVariable Long commentId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        CommentResponseDto responseDto = commentService.updateComment(commentId, requestDto, userDetails.getUser());
+        return ResponseEntity.ok(new GlobalResponseDto("수정 성공", responseDto));
+    }
 }
 

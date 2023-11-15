@@ -62,10 +62,11 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                        .requestMatchers("/api/user/**").permitAll() // 회원가입, 로그인 인증 필요 x
                         .requestMatchers(HttpMethod.POST).authenticated() // POST 요청 인증 처리
                         .requestMatchers(HttpMethod.PATCH).authenticated() // PATCH 요청 인증 처리
                         .requestMatchers(HttpMethod.DELETE).authenticated() // DELETE 요청 인증 처리
-                        .anyRequest().permitAll() // 그 외 모든 요청 허가 (회원가입, 로그인, 투두 목록&상세 조회
+                        .anyRequest().permitAll() // 그 외 모든 요청 허가 없이 진행 투두 목록&상세 조회
         );
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

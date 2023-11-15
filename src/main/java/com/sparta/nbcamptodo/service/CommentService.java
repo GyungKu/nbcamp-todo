@@ -25,4 +25,14 @@ public class CommentService {
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
     }
+
+    @Transactional
+    public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
+        if (comment.getUser().getId() != user.getId()) {
+            throw new IllegalArgumentException("본인의 댓글만 수정이 가능합니다.");
+        }
+        comment.update(requestDto.getContent());
+        return new CommentResponseDto(comment);
+    }
 }

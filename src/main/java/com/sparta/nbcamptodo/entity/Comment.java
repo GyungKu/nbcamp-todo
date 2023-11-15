@@ -27,4 +27,8 @@ public class Comment {
         this.todo = todo;
         todo.getComments().add(this);
     }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }
