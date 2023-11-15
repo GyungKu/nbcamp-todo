@@ -9,6 +9,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -31,6 +33,9 @@ public class Todo {
     @Column(updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createAt;
+
+    @OneToMany(mappedBy = "todo")
+    private List<Comment> comments = new ArrayList<>();
 
     public Todo(TodoRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
