@@ -1,9 +1,9 @@
 package com.sparta.nbcamptodo.controller;
 
 import com.sparta.nbcamptodo.dto.GlobalResponseDto;
+import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
-import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.security.UserDetailsImpl;
 import com.sparta.nbcamptodo.service.TodoService;
 import jakarta.validation.Valid;
