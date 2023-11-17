@@ -1,6 +1,7 @@
 package com.sparta.nbcamptodo.config;
 
 import com.sparta.nbcamptodo.jwt.JwtUtil;
+import com.sparta.nbcamptodo.security.ExceptionHandlerFilter;
 import com.sparta.nbcamptodo.security.JwtAuthenticationFilter;
 import com.sparta.nbcamptodo.security.JwtAuthorizationFilter;
 import com.sparta.nbcamptodo.security.UserDetailsServiceImpl;
@@ -51,6 +52,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter() {
+        return new ExceptionHandlerFilter();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable());
 
@@ -69,6 +75,7 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll() // 그 외 모든 요청 허가 없이 진행 투두 목록&상세 조회
         );
         // 필터 관리
+        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthorizationFilter.class);
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

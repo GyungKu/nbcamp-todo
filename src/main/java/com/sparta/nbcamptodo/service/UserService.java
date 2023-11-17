@@ -2,6 +2,7 @@ package com.sparta.nbcamptodo.service;
 
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.entity.User;
+import com.sparta.nbcamptodo.exception.DuplicateUsernameException;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class UserService {
     public String signup(SignRequestDto requestDto) {
         Optional<User> findUser = userRepository.findByUsername(requestDto.getUsername());
         if (findUser.isPresent()) {
-            throw new IllegalArgumentException("존재하는 회원입니다.");
+            throw new DuplicateUsernameException("중복 username 입니다.");
         }
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(new User(requestDto));

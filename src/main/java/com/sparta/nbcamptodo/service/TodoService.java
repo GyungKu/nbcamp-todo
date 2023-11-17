@@ -5,6 +5,8 @@ import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
+import com.sparta.nbcamptodo.exception.NotFoundException;
+import com.sparta.nbcamptodo.exception.UserValidationException;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,13 +66,13 @@ public class TodoService {
     }
 
     private Todo findTodo(Long todoId) {
-        return todoRepository.findById(todoId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 할 일 입니다."));
+        return todoRepository.findById(todoId).orElseThrow(() -> new NotFoundException("존재하지 않는 할 일 입니다."));
     }
 
     private Todo userValidation(Long userId, Long todoId) {
         Todo todo = findTodo(todoId);
         if (todo.getUser().getId() != userId) {
-            throw new IllegalArgumentException("본인의 할 일만 수정이 가능합니다.");
+            throw new UserValidationException("본인의 할 일만 수정이 가능합니다.");
         }
         return todo;
     }

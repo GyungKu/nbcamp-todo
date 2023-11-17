@@ -5,6 +5,8 @@ import com.sparta.nbcamptodo.dto.CommentResponseDto;
 import com.sparta.nbcamptodo.entity.Comment;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
+import com.sparta.nbcamptodo.exception.NotFoundException;
+import com.sparta.nbcamptodo.exception.UserValidationException;
 import com.sparta.nbcamptodo.repository.CommentRepository;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,12 +45,12 @@ public class CommentService {
 
     private static void userValidation(Long userId, Long commentUserId) {
         if (commentUserId != userId) {
-            throw new IllegalArgumentException("본인의 댓글만 수정이 가능합니다.");
+            throw new UserValidationException("본인의 댓글만 수정 및 삭제가 가능합니다.");
         }
     }
 
     private Comment findComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글 입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("존재하지 않는 댓글 입니다."));
         return comment;
     }
 }
