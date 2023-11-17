@@ -75,8 +75,8 @@ public class WebSecurityConfig {
                         .anyRequest().permitAll() // 그 외 모든 요청 허가 없이 진행 투두 목록&상세 조회
         );
         // 필터 관리
-        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthorizationFilter.class);
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthorizationFilter.class); // 순서가 첫번째라 제일 위에 놔야 좋을 것 같은데 에러가 남
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
