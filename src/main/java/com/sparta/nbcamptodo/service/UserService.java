@@ -26,6 +26,6 @@ public class UserService {
         }
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         userRepository.save(new User(requestDto));
-        return "가입 성공";
+        return "회원 가입 성공";
     }
 }
