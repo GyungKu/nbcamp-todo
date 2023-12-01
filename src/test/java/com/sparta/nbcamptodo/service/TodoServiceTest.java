@@ -7,12 +7,15 @@ import static org.mockito.BDDMockito.given;
 
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
+import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.exception.NotFoundException;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -81,6 +84,28 @@ class TodoServiceTest {
         //when - then
         assertThatThrownBy(() -> todoService.getTodo(todoId)).isInstanceOf(NotFoundException.class)
             .hasMessage("존재하지 않는 할 일 입니다.");
+    }
+
+    @Test
+    @DisplayName("유저 별 할 일 목록 조회 테스트")
+    void test4() {
+        //given
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        TodoRequestDto requestDto = new TodoRequestDto("제목", "내용");
+        List<Todo> todos = new ArrayList<>();
+        Todo todo = new Todo(requestDto, user);
+        todos.add(todo);
+        given(userRepository.findAll()).willReturn(users);
+        given(todoRepository.findAllByUserOrderByCreateAtDesc(any())).willReturn(todos);
+
+        //when
+        List<TodoListResponseDto> todoList = todoService.getTodoList();
+
+        //then
+        assertThat(todoList.size()).isEqualTo(1);
+        assertThat(todoList.get(0).getUser().getUsername()).isEqualTo(user.getUsername());
+        assertThat(todoList.get(0).getTodoList().get(0).getTitle()).isEqualTo(requestDto.getTitle());
     }
 
     private static User createUser() {
