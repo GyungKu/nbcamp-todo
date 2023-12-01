@@ -147,6 +147,39 @@ class TodoServiceTest {
         assertThat(responseDto.getContent()).isEqualTo(updateTodo.getContent());
     }
 
+    @Test
+    @DisplayName("할 일 완료 실패 테스트 - 본인 할 일만 가능")
+    void test7() {
+        //given
+        Long todoId = 1L;
+        Todo todo = new Todo(new TodoRequestDto("제목", "내용"), user);
+
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
+
+        //when
+        assertThatThrownBy(() -> todoService.completedTodo(todoId, new User(
+            new SignRequestDto("userB", "12345678")), true))
+            .isInstanceOf(UserValidationException.class);
+
+        //then
+    }
+
+    @Test
+    @DisplayName("할 일 완료 성공 테스트")
+    void test8() {
+        //given
+        Long todoId = 1L;
+        Todo todo = new Todo(new TodoRequestDto("제목", "내용"), user);
+
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
+
+        //when
+        todoService.completedTodo(todoId, user, true);
+
+        //then
+        assertThat(todo.getComplete()).isEqualTo(true);
+    }
+
     private static User createUser() {
         return new User(new SignRequestDto("userA", "12345678"));
     }
