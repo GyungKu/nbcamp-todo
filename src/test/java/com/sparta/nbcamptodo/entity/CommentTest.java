@@ -21,6 +21,18 @@ class CommentTest {
         assertThat(comment.getContent()).isEqualTo("내용 수정");
     }
 
+    @Test
+    @DisplayName("댓글 삭제 테스트")
+    void test2() {
+        User user = createUser();
+        Todo todo = createTodo(user);
+        Comment comment = createComment(user, todo);
+
+        comment.delete();
+
+        assertThat(todo.getComments().size()).isEqualTo(0);
+    }
+
     private static Comment createComment(User user, Todo todo) {
         return new Comment("내용", user, todo);
     }
