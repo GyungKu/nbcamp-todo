@@ -79,7 +79,8 @@ class TodoServiceTest {
         Long todoId = 1L;
 
         //when - then
-        assertThatThrownBy(() -> todoService.getTodo(todoId)).isInstanceOf(NotFoundException.class);
+        assertThatThrownBy(() -> todoService.getTodo(todoId)).isInstanceOf(NotFoundException.class)
+            .hasMessage("존재하지 않는 할 일 입니다.");
     }
 
     private static User createUser() {
