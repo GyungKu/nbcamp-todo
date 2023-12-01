@@ -31,20 +31,20 @@ public class CommentService {
     @Transactional
     public CommentResponseDto updateComment(Long commentId, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(commentId);
-        userValidation(user.getId(), comment.getUser().getId());
+        userValidation(user.getUsername(), comment.getUser().getUsername());
         comment.update(requestDto.getContent());
         return new CommentResponseDto(comment);
     }
 
     public void deleteComment(Long commentId, User user) {
         Comment comment = findComment(commentId);
-        userValidation(user.getId(), comment.getUser().getId());
+        userValidation(user.getUsername(), comment.getUser().getUsername());
         comment.delete();
         commentRepository.delete(comment);
     }
 
-    private static void userValidation(Long userId, Long commentUserId) {
-        if (commentUserId != userId) {
+    private void userValidation(String username, String commentAuthor) {
+        if (!commentAuthor.equals(username)) {
             throw new UserValidationException("본인의 댓글만 수정 및 삭제가 가능합니다.");
         }
     }
