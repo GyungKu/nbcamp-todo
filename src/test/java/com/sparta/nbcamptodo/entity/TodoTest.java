@@ -1,5 +1,6 @@
 package com.sparta.nbcamptodo.entity;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.sparta.nbcamptodo.dto.SignRequestDto;
@@ -21,8 +22,22 @@ class TodoTest {
         todo.update("제목 수정", "내용 수정");
 
         // then
-        Assertions.assertThat(todo.getTitle()).isEqualTo("제목 수정");
-        Assertions.assertThat(todo.getContent()).isEqualTo("내용 수정");
+        assertThat(todo.getTitle()).isEqualTo("제목 수정");
+        assertThat(todo.getContent()).isEqualTo("내용 수정");
+    }
+
+    @Test
+    @DisplayName("할 일 완료 테스트")
+    void test2() {
+        // given
+        User user = createUser();
+        Todo todo = createTodo(user);
+
+        // when
+        todo.completed(true);
+
+        // then
+        assertThat(todo.getComplete()).isEqualTo(true);
     }
 
     private static User createUser() {
