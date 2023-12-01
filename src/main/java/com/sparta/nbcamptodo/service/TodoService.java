@@ -54,14 +54,14 @@ public class TodoService {
 
     @Transactional
     public TodoDetailResponseDto updateTodo(Long todoId, TodoRequestDto requestDto, User user) {
-        Todo todo = userValidation(user.getId(), todoId);
+        Todo todo = userValidation(user.getUsername(), todoId);
         todo.update(requestDto.getTitle(), requestDto.getContent());
         return new TodoDetailResponseDto(todo);
     }
 
     @Transactional
     public void completedTodo(Long todoId, User user, Boolean complete) {
-        Todo todo = userValidation(user.getId(), todoId);
+        Todo todo = userValidation(user.getUsername(), todoId);
         todo.completed(complete);
     }
 
@@ -69,9 +69,9 @@ public class TodoService {
         return todoRepository.findById(todoId).orElseThrow(() -> new NotFoundException("존재하지 않는 할 일 입니다."));
     }
 
-    private Todo userValidation(Long userId, Long todoId) {
+    private Todo userValidation(String username, Long todoId) {
         Todo todo = findTodo(todoId);
-        if (todo.getUser().getId() != userId) {
+        if (!todo.getUser().getUsername().equals(username)) {
             throw new UserValidationException("본인의 할 일만 수정이 가능합니다.");
         }
         return todo;
