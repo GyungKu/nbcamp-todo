@@ -12,6 +12,7 @@ import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.exception.NotFoundException;
+import com.sparta.nbcamptodo.exception.UserValidationException;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -33,6 +35,7 @@ class TodoServiceTest {
     @Mock
     UserRepository userRepository;
 
+    @InjectMocks
     TodoService todoService;
 
     User user;
@@ -40,7 +43,6 @@ class TodoServiceTest {
     @BeforeEach
     void init() {
         user = new User(new SignRequestDto("userA", "12345678"));
-        todoService = new TodoService(todoRepository, userRepository);
     }
 
     @Test
@@ -92,10 +94,12 @@ class TodoServiceTest {
         //given
         List<User> users = new ArrayList<>();
         users.add(user);
+
         TodoRequestDto requestDto = new TodoRequestDto("제목", "내용");
         List<Todo> todos = new ArrayList<>();
         Todo todo = new Todo(requestDto, user);
         todos.add(todo);
+
         given(userRepository.findAll()).willReturn(users);
         given(todoRepository.findAllByUserOrderByCreateAtDesc(any())).willReturn(todos);
 
@@ -106,6 +110,41 @@ class TodoServiceTest {
         assertThat(todoList.size()).isEqualTo(1);
         assertThat(todoList.get(0).getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(todoList.get(0).getTodoList().get(0).getTitle()).isEqualTo(requestDto.getTitle());
+    }
+
+    @Test
+    @DisplayName("할 일 수정 실패 테스트 - 본인 할 일만 가능")
+    void test5() {
+        //given
+        Long todoId = 1L;
+        Todo todo = new Todo(new TodoRequestDto("제목", "내용"), user);
+        TodoRequestDto updateTodo = new TodoRequestDto("제목 수정", "내용 수정");
+
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
+
+        //when - then
+        assertThatThrownBy(() -> todoService.updateTodo(todoId, updateTodo,
+            new User(new SignRequestDto("userB", "12345678"))))
+            .isInstanceOf(UserValidationException.class);
+    }
+
+    @Test
+    @DisplayName("할 일 수정 성공 테스트")
+    void test6() {
+        //given
+        Long todoId = 1L;
+        Todo todo = new Todo(new TodoRequestDto("제목", "내용"), user);
+        TodoRequestDto updateTodo = new TodoRequestDto("제목 수정", "내용 수정");
+
+        given(todoRepository.findById(todoId)).willReturn(Optional.of(todo));
+
+        //when
+        TodoDetailResponseDto responseDto = todoService.updateTodo(todoId, updateTodo,
+            user);
+
+        //then
+        assertThat(responseDto.getTitle()).isEqualTo(updateTodo.getTitle());
+        assertThat(responseDto.getContent()).isEqualTo(updateTodo.getContent());
     }
 
     private static User createUser() {
