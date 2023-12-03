@@ -30,9 +30,6 @@ class UserDetailsServiceImplTest {
     @Test
     @DisplayName("유저 불러오기 실패 테스트 - 존재 하지 않는 회원")
     void test1() {
-        //given
-        User user = new User(new SignRequestDto("userA", "12345678"));
-
         //when - then
         assertThatThrownBy(() -> userDetailsService.loadUserByUsername("userB"))
             .isInstanceOf(UsernameNotFoundException.class)
