@@ -3,6 +3,7 @@ package com.sparta.nbcamptodo.controller;
 import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
@@ -18,6 +20,8 @@ import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
+import com.sparta.nbcamptodo.exception.NotFoundException;
+import com.sparta.nbcamptodo.exception.UserValidationException;
 import com.sparta.nbcamptodo.mockSecurity.MockSpringSecurityFilter;
 import com.sparta.nbcamptodo.security.UserDetailsImpl;
 import com.sparta.nbcamptodo.service.TodoService;
@@ -134,6 +138,21 @@ class TodoControllerTest {
 
             verify(todoService).getTodoList();
         }
+
+        @Test
+        @DisplayName("상세 조회 실패 테스트 - 존재하지 않는 할 일")
+        void test3() throws Exception {
+            //given
+            given(todoService.getTodo(any())).willThrow(new NotFoundException("존재하지 않는 할 일 입니다."));
+
+            //when
+            mvc.perform(get("/api/todo/1"))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+            //then
+            verify(todoService).getTodo(any());
+        }
     }
 
     @Nested
@@ -171,6 +190,50 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.message").value("할 일 완료 처리 성공"))
                 .andExpect(jsonPath("$.data").value("succeed todo complete update"))
                 .andDo(print());
+        }
+
+        @Test
+        @DisplayName("할 일 수정 실패 테스트 - 본인의 할 일이 아님")
+        void test3() throws Exception {
+            //given
+            TodoRequestDto requestDto = new TodoRequestDto("제목 수정", "내용 수정");
+            given(todoService.updateTodo(any(), any(), any()))
+                .willThrow(new UserValidationException("본인의 할 일만 수정이 가능합니다."));
+
+            //when - then
+            mvc.perform(patch("/api/todo/1")
+                    .content(objectMapper.writeValueAsString(requestDto))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .principal(principal))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.data").exists())
+                .andDo(print());
+
+            verify(todoService).updateTodo(any(), any(), any());
+        }
+
+        @Test
+        @DisplayName("할 일 수정 실패 테스트 - 존재하지 않는 할 일")
+        void test4() throws Exception {
+            //given
+            TodoRequestDto requestDto = new TodoRequestDto("제목 수정", "내용 수정");
+            given(todoService.updateTodo(any(), any(), any()))
+                .willThrow(new NotFoundException("존재하지 않는 할 일 입니다."));
+
+            //when
+            mvc.perform(patch("/api/todo/1")
+                    .content(objectMapper.writeValueAsString(requestDto))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .principal(principal))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.data").exists())
+                .andDo(print());
+
+            verify(todoService).updateTodo(any(), any(), any());
         }
     }
 
