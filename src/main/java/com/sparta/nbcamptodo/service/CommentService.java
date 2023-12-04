@@ -22,7 +22,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(Long todoId, CommentRequestDto requestDto, User user) {
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 할 일 입니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new NotFoundException("존재하지 않는 할 일 입니다."));
         Comment comment = new Comment(requestDto.getContent(), user, todo);
         commentRepository.save(comment);
         return new CommentResponseDto(comment);
