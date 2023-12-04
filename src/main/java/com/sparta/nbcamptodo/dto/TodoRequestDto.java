@@ -1,5 +1,6 @@
 package com.sparta.nbcamptodo.dto;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,4 +12,10 @@ public class TodoRequestDto {
 
     private String content;
 
+    private LocalDateTime createAt;
+
+    public TodoRequestDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

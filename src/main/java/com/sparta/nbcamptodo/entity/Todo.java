@@ -42,6 +42,9 @@ public class Todo {
         this.content = requestDto.getContent();
         this.user = user;
         complete = false;
+        if (requestDto.getCreateAt() != null) {
+            this.createAt = requestDto.getCreateAt();
+        }
     }
 
     public void update(String title, String content) {
