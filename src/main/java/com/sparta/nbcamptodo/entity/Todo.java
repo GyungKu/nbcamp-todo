@@ -16,7 +16,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Todo {
+public class Todo extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,6 @@ public class Todo {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createAt;
-
     @OneToMany(mappedBy = "todo")
     private List<Comment> comments = new ArrayList<>();
 
@@ -42,9 +37,6 @@ public class Todo {
         this.content = requestDto.getContent();
         this.user = user;
         complete = false;
-        if (requestDto.getCreateAt() != null) {
-            this.createAt = requestDto.getCreateAt();
-        }
     }
 
     public void update(String title, String content) {
