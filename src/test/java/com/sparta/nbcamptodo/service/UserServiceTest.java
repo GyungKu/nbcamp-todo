@@ -30,7 +30,7 @@ class UserServiceTest {
     void test1() {
         // given
         SignRequestDto requestDto = new SignRequestDto("userA", "12345678");
-        UserService userService = new UserService(userRepository, passwordEncoder);
+        UserService userService = new UserServiceImpl(userRepository, passwordEncoder);
 
         // when
         String message = userService.signup(requestDto);
@@ -44,7 +44,7 @@ class UserServiceTest {
     void test2() {
         //given
         SignRequestDto requestDto = new SignRequestDto("userA", "12345678");
-        UserService userService = new UserService(userRepository, passwordEncoder);
+        UserService userService = new UserServiceImpl(userRepository, passwordEncoder);
         User user = new User(requestDto);
         BDDMockito.given(userRepository.findByUsername(requestDto.getUsername()))
             .willReturn(Optional.of(user));

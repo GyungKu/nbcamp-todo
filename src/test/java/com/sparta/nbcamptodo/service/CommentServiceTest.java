@@ -1,7 +1,8 @@
 package com.sparta.nbcamptodo.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
 
 import com.sparta.nbcamptodo.dto.CommentRequestDto;
 import com.sparta.nbcamptodo.dto.CommentResponseDto;
@@ -34,7 +35,7 @@ class CommentServiceTest {
     TodoRepository todoRepository;
 
     @InjectMocks
-    CommentService commentService;
+    CommentServiceImpl commentService;
 
     User user;
 
@@ -58,7 +59,7 @@ class CommentServiceTest {
 
             //when - then
             assertThatThrownBy(() -> commentService.createComment(1L, requestDto, user))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(NotFoundException.class)
                 .hasMessage("존재하지 않는 할 일 입니다.");
         }
 

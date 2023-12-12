@@ -36,7 +36,7 @@ class TodoServiceTest {
     UserRepository userRepository;
 
     @InjectMocks
-    TodoService todoService;
+    TodoServiceImpl todoService;
 
     User user;
 
