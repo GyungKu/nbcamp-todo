@@ -12,9 +12,10 @@ import org.springframework.stereotype.Component;
 public class TimeAop {
 
     @Around("execution(* com.sparta.nbcamptodo.controller..*(..))")
-    public void timeLog(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object timeLog(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
-        joinPoint.proceed();
+        Object result = joinPoint.proceed();
         log.info("method = {}, 걸린 시간 = {}ms", joinPoint.getSignature().getName(), System.currentTimeMillis() - start);
+        return result;
     }
 }

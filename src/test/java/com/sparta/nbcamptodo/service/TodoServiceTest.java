@@ -101,7 +101,7 @@ class TodoServiceTest {
         todos.add(todo);
 
         given(userRepository.findAll()).willReturn(users);
-        given(todoRepository.findAllByUserOrderByCreateAtDesc(any())).willReturn(todos);
+        given(todoRepository.findAllByUserOrderByCreatedAtDesc(any())).willReturn(todos);
 
         //when
         List<TodoListResponseDto> todoList = todoService.getTodoList();

@@ -3,14 +3,18 @@ package com.sparta.nbcamptodo.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import com.sparta.nbcamptodo.dto.GlobalResponseDto;
+import com.sparta.nbcamptodo.dto.PageDto;
+import com.sparta.nbcamptodo.dto.TodoCondition;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
+import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
 import com.sparta.nbcamptodo.security.UserDetailsImpl;
 import com.sparta.nbcamptodo.service.TodoService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,6 +50,14 @@ public class TodoController {
         List<TodoListResponseDto> responseDto = todoService.getTodoList();
         GlobalResponseDto<List<TodoListResponseDto>> todoList = new GlobalResponseDto<>("할 일 유저벌 목록 조회", responseDto);
         return ResponseEntity.ok(todoList);
+    }
+
+    @GetMapping("/todoList/search")
+    public ResponseEntity<GlobalResponseDto> getTodoListSearch(PageDto pageDto,
+        TodoCondition condition) {
+
+        Page<TodoSearchResponseDto> responseDto = todoService.getTodoListSearch(pageDto, condition);
+        return ResponseEntity.ok(new GlobalResponseDto("검색 할 일 조회", responseDto));
     }
 
     @PatchMapping("/todo/{todoId}")

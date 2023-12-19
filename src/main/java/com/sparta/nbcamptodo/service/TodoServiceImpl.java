@@ -1,20 +1,24 @@
 package com.sparta.nbcamptodo.service;
 
+import com.sparta.nbcamptodo.dto.PageDto;
+import com.sparta.nbcamptodo.dto.TodoCondition;
+import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
-import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
+import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
 import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.exception.NotFoundException;
 import com.sparta.nbcamptodo.exception.UserValidationException;
+import com.sparta.nbcamptodo.repository.TodoQueryDslRepository;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
+    private final TodoQueryDslRepository todoQueryDslRepository;
 
     @Transactional
     public TodoDetailResponseDto createTodo(TodoRequestDto requestDto, User user) {
@@ -45,11 +50,17 @@ public class TodoServiceImpl implements TodoService {
          * 모든 유저를 뽑아온 후, 유저별로 todoList를 뽑고 responseDto에 넣어주는 방식을 선택함
          */
         for (User user : users) {
-            List<Todo> todos = todoRepository.findAllByUserOrderByCreateAtDesc(user);
+            List<Todo> todos = todoRepository.findAllByUserOrderByCreatedAtDesc(user);
             todoList.add(new TodoListResponseDto(user, todos));
         }
 
         return todoList;
+    }
+
+    @Override
+    public Page<TodoSearchResponseDto> getTodoListSearch(PageDto pageDto, TodoCondition condition) {
+        Page<Todo> todoList = todoQueryDslRepository.searchTodoList(condition, pageDto.toPageable());
+       return todoList.map(todo -> new TodoSearchResponseDto(todo, todo.getUser()));
     }
 
     @Transactional
