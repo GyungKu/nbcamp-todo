@@ -11,8 +11,16 @@ public class TodoRequestDto {
 
     private String content;
 
+    private LocalDateTime createdAt;
+
     public TodoRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public TodoRequestDto(String title, String content, LocalDateTime createdAt) {
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
     }
 }
