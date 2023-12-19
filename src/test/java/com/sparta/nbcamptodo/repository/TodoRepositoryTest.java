@@ -8,7 +8,6 @@ import com.sparta.nbcamptodo.entity.Todo;
 import com.sparta.nbcamptodo.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +32,19 @@ public class TodoRepositoryTest {
         User user = new User(new SignRequestDto("user1", "12345678"));
         userRepository.save(user);
         Todo todo1 = new Todo(new TodoRequestDto(
-            "제목1", "내용1", LocalDateTime.now()), user);
+            "제목1", "내용1"), user);
         Todo todo2 = new Todo(new TodoRequestDto(
-                "제목2", "내용2", LocalDateTime.now().plusMinutes(5)), user);
+                "제목2", "내용2"), user);
         Todo todo3 = new Todo(new TodoRequestDto(
-            "제목3", "내용3", LocalDateTime.now().plusMinutes(10)), user);
+            "제목3", "내용3"), user);
         todoRepository.save(todo1);
         todoRepository.save(todo2);
         todoRepository.save(todo3);
 
+        System.out.println("todo1.getCreatedAt() = " + todo1.getCreatedAt());
+
         //when
-        List<Todo> todoList = todoRepository.findAllByUserOrderByCreateAtDesc(
+        List<Todo> todoList = todoRepository.findAllByUserOrderByCreatedAtDesc(
             user);
 
         //then

@@ -37,8 +37,7 @@ public class TodoQueryDslRepository {
 
         JPAQuery<Long> count = queryFactory.select(todo.count())
             .from(todo)
-            .where(searchTitle(condition).or(searchContent(condition)))
-            .orderBy(todo.createdAt.desc());
+            .where(searchTitle(condition).or(searchContent(condition)));
 
         return PageableExecutionUtils.getPage(list, pageable, count::fetchOne);
     }
