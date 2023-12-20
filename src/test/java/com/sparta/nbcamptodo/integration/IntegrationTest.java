@@ -2,6 +2,7 @@ package com.sparta.nbcamptodo.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.sparta.nbcamptodo.config.JpaConfig;
 import com.sparta.nbcamptodo.dto.PageDto;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.TodoCondition;
@@ -16,9 +17,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
 @SpringBootTest
+@Import(JpaConfig.class)
 public class IntegrationTest {
 
     @Autowired
