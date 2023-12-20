@@ -1,6 +1,7 @@
 package com.sparta.nbcamptodo.service;
 
 import com.sparta.nbcamptodo.dto.PageDto;
+import com.sparta.nbcamptodo.dto.SortDto;
 import com.sparta.nbcamptodo.dto.TodoCondition;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.dto.TodoListResponseDto;
@@ -58,8 +59,10 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public Page<TodoSearchResponseDto> getTodoListSearch(PageDto pageDto, TodoCondition condition) {
-        Page<Todo> todoList = todoQueryDslRepository.searchTodoList(condition, pageDto.toPageable());
+    public Page<TodoSearchResponseDto> getTodoListSearch(PageDto pageDto, SortDto sortDto,
+        TodoCondition condition) {
+        Page<Todo> todoList = todoQueryDslRepository.searchTodoList(condition, pageDto.toPageable(),
+            sortDto);
        return todoList.map(todo -> new TodoSearchResponseDto(todo, todo.getUser()));
     }
 

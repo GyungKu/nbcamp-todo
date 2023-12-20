@@ -4,6 +4,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 
 import com.sparta.nbcamptodo.dto.GlobalResponseDto;
 import com.sparta.nbcamptodo.dto.PageDto;
+import com.sparta.nbcamptodo.dto.SortDto;
 import com.sparta.nbcamptodo.dto.TodoCondition;
 import com.sparta.nbcamptodo.dto.TodoDetailResponseDto;
 import com.sparta.nbcamptodo.dto.TodoListResponseDto;
@@ -53,10 +54,11 @@ public class TodoController {
     }
 
     @GetMapping("/todoList/search")
-    public ResponseEntity<GlobalResponseDto> getTodoListSearch(PageDto pageDto,
+    public ResponseEntity<GlobalResponseDto> getTodoListSearch(PageDto pageDto, SortDto sortDto,
         TodoCondition condition) {
 
-        Page<TodoSearchResponseDto> responseDto = todoService.getTodoListSearch(pageDto, condition);
+        Page<TodoSearchResponseDto> responseDto = todoService.getTodoListSearch(pageDto, sortDto,
+            condition);
         return ResponseEntity.ok(new GlobalResponseDto("검색 할 일 조회", responseDto));
     }
 

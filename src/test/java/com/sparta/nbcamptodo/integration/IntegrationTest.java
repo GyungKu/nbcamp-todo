@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.sparta.nbcamptodo.config.JpaConfig;
 import com.sparta.nbcamptodo.dto.PageDto;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
+import com.sparta.nbcamptodo.dto.SortDto;
 import com.sparta.nbcamptodo.dto.TodoCondition;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
@@ -49,10 +50,11 @@ public class IntegrationTest {
 
         PageDto pageDto = new PageDto(1, 2);
         TodoCondition condition = new TodoCondition("제목", "내용");
+        SortDto sortDto = new SortDto("createdAt", false);
 
         //when
         Page<TodoSearchResponseDto> todoList = todoService.getTodoListSearch(pageDto,
-            condition);
+            sortDto, condition);
 
         //then
         assertThat(todoList.getContent().size()).isEqualTo(2);
