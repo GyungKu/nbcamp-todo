@@ -2,6 +2,7 @@ package com.sparta.nbcamptodo.dto;
 
 import com.sparta.nbcamptodo.entity.Comment;
 import com.sparta.nbcamptodo.entity.Todo;
+import com.sparta.nbcamptodo.entity.TodoImage;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -17,8 +18,8 @@ public class TodoDetailResponseDto {
     private String username;
     private Boolean complete;
     private LocalDateTime createdAt;
-    private String imageUrl;
     private List<CommentResponseDto> comments = new ArrayList<>();
+    private List<TodoImageDto> images;
 
     public TodoDetailResponseDto(Todo todo) {
         this.id = todo.getId();
@@ -27,9 +28,9 @@ public class TodoDetailResponseDto {
         this.username = todo.getUser().getUsername();
         this.complete = todo.getComplete();
         this.createdAt = todo.getCreatedAt();
-        this.imageUrl = todo.getImageUrl();
         for (Comment comment : todo.getComments()) {
             comments.add(new CommentResponseDto(comment));
         }
+        images = todo.getImages().stream().map(TodoImageDto::new).toList();
     }
 }

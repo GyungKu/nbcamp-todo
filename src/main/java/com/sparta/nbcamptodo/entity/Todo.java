@@ -24,13 +24,15 @@ public class Todo extends BaseEntity{
     private String title;
     private String content;
     private Boolean complete;
-    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "todo")
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "todo")
+    private List<TodoImage> images = new ArrayList<>();
 
     public Todo(TodoRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
@@ -48,7 +50,7 @@ public class Todo extends BaseEntity{
         this.complete = complete;
     }
 
-    public void imageUpload(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void addImage(TodoImage todoImage) {
+        images.add(todoImage);
     }
 }

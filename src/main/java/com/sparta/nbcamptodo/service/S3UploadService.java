@@ -17,15 +17,14 @@ public class S3UploadService {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    public String saveFile(MultipartFile multipartFile) throws IOException {
-        String originalFilename = multipartFile.getOriginalFilename();
+    public String saveFile(MultipartFile multipartFile, String saveName) throws IOException {
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(multipartFile.getSize());
         metadata.setContentType(multipartFile.getContentType());
 
-        amazonS3.putObject(bucket, originalFilename, multipartFile.getInputStream(), metadata);
-        return amazonS3.getUrl(bucket, originalFilename).toString();
+        amazonS3.putObject(bucket, saveName, multipartFile.getInputStream(), metadata);
+        return amazonS3.getUrl(bucket, saveName).toString();
     }
 
 }

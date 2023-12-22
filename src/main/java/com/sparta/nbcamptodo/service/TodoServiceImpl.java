@@ -8,6 +8,7 @@ import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
 import com.sparta.nbcamptodo.entity.Todo;
+import com.sparta.nbcamptodo.entity.TodoImage;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.exception.NotFoundException;
 import com.sparta.nbcamptodo.exception.UserValidationException;
@@ -30,7 +31,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
     private final TodoQueryDslRepository todoQueryDslRepository;
-    private final S3UploadService s3UploadService;
+    private final FileService fileService;
 
     @Transactional
     public TodoDetailResponseDto createTodo(TodoRequestDto requestDto, User user) {
@@ -74,9 +75,9 @@ public class TodoServiceImpl implements TodoService {
     public String uploadImage(Long todoId, MultipartFile multipartFile, User user)
         throws IOException {
         Todo todo = userValidation(user.getUsername(), todoId);
-        String imageUrl = s3UploadService.saveFile(multipartFile);
-        todo.imageUpload(imageUrl);
-        return imageUrl;
+        TodoImage image = fileService.upload(multipartFile, todo);
+        todo.addImage(image);
+        return image.getUrl();
     }
 
     @Transactional
