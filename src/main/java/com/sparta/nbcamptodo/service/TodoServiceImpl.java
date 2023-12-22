@@ -12,7 +12,6 @@ import com.sparta.nbcamptodo.entity.TodoImage;
 import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.exception.NotFoundException;
 import com.sparta.nbcamptodo.exception.UserValidationException;
-import com.sparta.nbcamptodo.repository.TodoQueryDslRepository;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import java.io.IOException;
@@ -30,7 +29,6 @@ public class TodoServiceImpl implements TodoService {
 
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
-    private final TodoQueryDslRepository todoQueryDslRepository;
     private final FileService fileService;
 
     @Transactional
@@ -65,7 +63,8 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public Page<TodoSearchResponseDto> getTodoListSearch(PageDto pageDto, SortDto sortDto,
         TodoCondition condition) {
-        Page<Todo> todoList = todoQueryDslRepository.searchTodoList(condition, pageDto.toPageable(),
+
+        Page<Todo> todoList = todoRepository.searchTodoList(condition, pageDto.toPageable(),
             sortDto);
        return todoList.map(todo -> new TodoSearchResponseDto(todo, todo.getUser()));
     }
@@ -74,6 +73,7 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public String uploadImage(Long todoId, MultipartFile multipartFile, User user)
         throws IOException {
+
         Todo todo = userValidation(user.getUsername(), todoId);
         TodoImage image = fileService.upload(multipartFile, todo);
         todo.addImage(image);
@@ -94,7 +94,8 @@ public class TodoServiceImpl implements TodoService {
     }
 
     private Todo findTodo(Long todoId) {
-        return todoRepository.findById(todoId).orElseThrow(() -> new NotFoundException("존재하지 않는 할 일 입니다."));
+        return todoRepository.findById(todoId)
+            .orElseThrow(() -> new NotFoundException("존재하지 않는 할 일 입니다."));
     }
 
     private Todo userValidation(String username, Long todoId) {
