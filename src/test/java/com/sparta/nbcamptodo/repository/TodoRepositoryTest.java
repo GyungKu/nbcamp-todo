@@ -3,6 +3,7 @@ package com.sparta.nbcamptodo.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import com.sparta.nbcamptodo.config.JpaConfig;
+import com.sparta.nbcamptodo.config.QuerydslConfig;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.entity.Todo;
@@ -19,7 +20,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@Import(JpaConfig.class)
+@Import({JpaConfig.class, QuerydslConfig.class})
 public class TodoRepositoryTest {
 
     @Autowired

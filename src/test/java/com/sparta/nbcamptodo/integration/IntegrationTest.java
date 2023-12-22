@@ -3,6 +3,8 @@ package com.sparta.nbcamptodo.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.sparta.nbcamptodo.config.JpaConfig;
+import com.sparta.nbcamptodo.config.QuerydslConfig;
+import com.sparta.nbcamptodo.config.S3Config;
 import com.sparta.nbcamptodo.dto.PageDto;
 import com.sparta.nbcamptodo.dto.SignRequestDto;
 import com.sparta.nbcamptodo.dto.SortDto;
@@ -22,7 +24,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 
 @SpringBootTest
-@Import(JpaConfig.class)
+@Import({JpaConfig.class, S3Config.class, QuerydslConfig.class})
 public class IntegrationTest {
 
     @Autowired
