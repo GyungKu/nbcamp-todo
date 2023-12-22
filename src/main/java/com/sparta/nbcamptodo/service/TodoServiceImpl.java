@@ -14,12 +14,14 @@ import com.sparta.nbcamptodo.exception.UserValidationException;
 import com.sparta.nbcamptodo.repository.TodoQueryDslRepository;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
     private final TodoQueryDslRepository todoQueryDslRepository;
+    private final S3UploadService s3UploadService;
 
     @Transactional
     public TodoDetailResponseDto createTodo(TodoRequestDto requestDto, User user) {
@@ -64,6 +67,16 @@ public class TodoServiceImpl implements TodoService {
         Page<Todo> todoList = todoQueryDslRepository.searchTodoList(condition, pageDto.toPageable(),
             sortDto);
        return todoList.map(todo -> new TodoSearchResponseDto(todo, todo.getUser()));
+    }
+
+    @Override
+    @Transactional
+    public String uploadImage(Long todoId, MultipartFile multipartFile, User user)
+        throws IOException {
+        Todo todo = userValidation(user.getUsername(), todoId);
+        String imageUrl = s3UploadService.saveFile(multipartFile);
+        todo.imageUpload(imageUrl);
+        return imageUrl;
     }
 
     @Transactional

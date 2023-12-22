@@ -17,6 +17,7 @@ public class TodoDetailResponseDto {
     private String username;
     private Boolean complete;
     private LocalDateTime createdAt;
+    private String imageUrl;
     private List<CommentResponseDto> comments = new ArrayList<>();
 
     public TodoDetailResponseDto(Todo todo) {
@@ -26,6 +27,7 @@ public class TodoDetailResponseDto {
         this.username = todo.getUser().getUsername();
         this.complete = todo.getComplete();
         this.createdAt = todo.getCreatedAt();
+        this.imageUrl = todo.getImageUrl();
         for (Comment comment : todo.getComments()) {
             comments.add(new CommentResponseDto(comment));
         }

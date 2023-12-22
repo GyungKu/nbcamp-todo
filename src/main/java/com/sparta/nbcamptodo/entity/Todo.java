@@ -24,6 +24,7 @@ public class Todo extends BaseEntity{
     private String title;
     private String content;
     private Boolean complete;
+    private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
@@ -45,5 +46,9 @@ public class Todo extends BaseEntity{
 
     public void completed(Boolean complete) {
         this.complete = complete;
+    }
+
+    public void imageUpload(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

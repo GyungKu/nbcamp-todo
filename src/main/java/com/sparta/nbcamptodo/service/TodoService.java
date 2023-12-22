@@ -8,8 +8,10 @@ import com.sparta.nbcamptodo.dto.TodoListResponseDto;
 import com.sparta.nbcamptodo.dto.TodoRequestDto;
 import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
 import com.sparta.nbcamptodo.entity.User;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface TodoService {
 
@@ -24,4 +26,6 @@ public interface TodoService {
     void completedTodo(Long todoId, User user, Boolean complete);
 
     Page<TodoSearchResponseDto> getTodoListSearch(PageDto pageDto, SortDto sortDto, TodoCondition condition);
+
+    String uploadImage(Long todoId, MultipartFile multipartFile, User user) throws IOException;
 }

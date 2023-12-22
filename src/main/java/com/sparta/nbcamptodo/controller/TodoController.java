@@ -13,6 +13,7 @@ import com.sparta.nbcamptodo.dto.TodoSearchResponseDto;
 import com.sparta.nbcamptodo.security.UserDetailsImpl;
 import com.sparta.nbcamptodo.service.TodoService;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api")
@@ -34,8 +36,12 @@ public class TodoController {
     private final TodoService todoService;
 
     @PostMapping("/todo")
-    public ResponseEntity<GlobalResponseDto> createTodo(@RequestBody @Valid TodoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        GlobalResponseDto<TodoDetailResponseDto> response = new GlobalResponseDto<>("할 일 생성 성공", todoService.createTodo(requestDto, userDetails.getUser()));
+    public ResponseEntity<GlobalResponseDto> createTodo(
+        @RequestBody @Valid TodoRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        GlobalResponseDto<TodoDetailResponseDto> response = new GlobalResponseDto<>
+            ("할 일 생성 성공", todoService.createTodo(requestDto, userDetails.getUser()));
         return ResponseEntity.status(CREATED).body(response);
     }
 
@@ -73,6 +79,15 @@ public class TodoController {
     public ResponseEntity<GlobalResponseDto> completedTodo(@PathVariable Long todoId, Boolean complete, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         todoService.completedTodo(todoId, userDetails.getUser(), complete);
         return ResponseEntity.ok(new GlobalResponseDto("할 일 완료 처리 성공", "succeed todo complete update"));
+    }
+
+    @PostMapping("/todo/imageUpload/{todoId}")
+    public ResponseEntity<GlobalResponseDto> uploadImage(@PathVariable Long todoId,
+        MultipartFile multipartFile, @AuthenticationPrincipal UserDetailsImpl userDetails)
+        throws IOException {
+
+        String imageUrl = todoService.uploadImage(todoId, multipartFile, userDetails.getUser());
+        return ResponseEntity.ok(new GlobalResponseDto("이미지 주소", imageUrl));
     }
 
 }
