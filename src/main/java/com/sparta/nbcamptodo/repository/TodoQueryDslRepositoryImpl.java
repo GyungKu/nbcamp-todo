@@ -4,6 +4,7 @@ import static com.querydsl.core.types.Order.*;
 import static com.sparta.nbcamptodo.entity.QTodo.*;
 import static com.sparta.nbcamptodo.entity.QUser.*;
 
+import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -63,24 +64,19 @@ public class TodoQueryDslRepositoryImpl implements TodoQueryDslRepository{
             return new OrderSpecifier(DESC, todo.createdAt);
         }
         if (sortDto.isAsc()) {
-            switch (sortDto.getSortBy()) {
-                case "createdAt":
-                    return new OrderSpecifier(ASC, todo.createdAt);
-                case "title":
-                    return new OrderSpecifier(ASC, todo.title);
-                case "content":
-                    return new OrderSpecifier(ASC, todo.content);
-                default:
-                    throw new IllegalArgumentException("없는 정렬 조건입니다.");
-            }
+            return getOrderSpecifier(ASC, sortDto);
         }
+        return getOrderSpecifier(DESC, sortDto);
+    }
+
+    private OrderSpecifier getOrderSpecifier(Order order, SortDto sortDto) {
         switch (sortDto.getSortBy()) {
             case "createdAt":
-                return new OrderSpecifier(DESC, todo.createdAt);
+                return new OrderSpecifier(order, todo.createdAt);
             case "title":
-                return new OrderSpecifier(DESC, todo.title);
+                return new OrderSpecifier(order, todo.title);
             case "content":
-                return new OrderSpecifier(DESC, todo.content);
+                return new OrderSpecifier(order, todo.content);
             default:
                 throw new IllegalArgumentException("없는 정렬 조건입니다.");
         }
