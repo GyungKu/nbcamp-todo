@@ -77,6 +77,7 @@ public class TodoRepositoryTest {
         todoRepository.save(todo2);
         todoRepository.save(todo3);
 
+        // codeDeploy 테스트 주석
         /**
          * and가 아닌 or이므로, 제목, 내용 둘 중 하나라도 일치하면 꺼내온다.
          * 아래서 꺼내오는 데이터는 2개, 제목이 제목1인 것과 내용이 내용2인 것
