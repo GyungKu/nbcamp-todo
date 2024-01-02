@@ -31,7 +31,7 @@ class UserServiceTest {
         // given
         SignRequestDto requestDto = new SignRequestDto("userA", "12345678");
         UserService userService = new UserServiceImpl(userRepository, passwordEncoder);
-        System.out.println("테스트");
+        System.out.println("cd테스트테스트");
 
         // when
         String message = userService.signup(requestDto);
