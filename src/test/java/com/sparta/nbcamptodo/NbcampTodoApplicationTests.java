@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
 @SpringBootTest
-@Import({JpaConfig.class, S3Config.class, QuerydslConfig.class})
 class NbcampTodoApplicationTests {
 
 	@Test

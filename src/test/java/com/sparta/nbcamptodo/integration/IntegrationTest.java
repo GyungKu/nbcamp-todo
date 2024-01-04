@@ -16,6 +16,7 @@ import com.sparta.nbcamptodo.entity.User;
 import com.sparta.nbcamptodo.repository.TodoRepository;
 import com.sparta.nbcamptodo.repository.UserRepository;
 import com.sparta.nbcamptodo.service.TodoService;
+import net.bytebuddy.build.ToStringPlugin.Exclude;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
