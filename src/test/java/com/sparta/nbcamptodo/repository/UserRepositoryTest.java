@@ -27,7 +27,7 @@ public class UserRepositoryTest {
     @DisplayName("유저 DB 저장 테스트")
     void test1() {
         //given
-        User user = new User(new SignRequestDto("user1", "1234567"));
+        User user = new User(new SignRequestDto("user1", "12345678"));
 
         //when
         User saveUser = userRepository.save(user);
