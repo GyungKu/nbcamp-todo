@@ -37,7 +37,7 @@ class UserServiceTest {
         String message = userService.signup(requestDto);
 
         // then
-        assertThat(message).isEqualTo("회원 가입 성공");
+        assertThat(message).isEqualTo("회원 가입 성공 테스트 실패");
     }
 
     @Test
