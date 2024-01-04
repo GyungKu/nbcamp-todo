@@ -57,7 +57,7 @@ class TodoServiceTest {
         TodoDetailResponseDto responseDto = todoService.createTodo(requestDto, user);
 
         //then
-        assertThat(responseDto.getTitle()).isEqualTo("테스트 실패하기");
+        assertThat(responseDto.getTitle()).isEqualTo(requestDto.getTitle());
         assertThat(responseDto.getContent()).isEqualTo(requestDto.getContent());
     }
 
