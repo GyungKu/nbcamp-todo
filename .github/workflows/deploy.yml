@@ -33,6 +33,13 @@ jobs:
     # Gradle test를 실행한다
     - name: Test with Gradle
       run: ./gradlew --info test
+
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
+      with:
+        files: |
+          build/test-results/**/*.xml
     
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
