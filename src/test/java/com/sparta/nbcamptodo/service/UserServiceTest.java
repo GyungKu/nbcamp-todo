@@ -36,6 +36,7 @@ class UserServiceTest {
         // when
         String message = userService.signup(requestDto);
 
+        System.out.println("자동머지테스트");
         // then
         assertThat(message).isEqualTo("회원 가입 성공");
     }
