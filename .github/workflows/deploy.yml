@@ -8,9 +8,21 @@ on:
     branches:
       - main
     types:
+      - labeled
+      - unlabeled
       - synchronize
       - opened
+      - edited
       - ready_for_review
+      - reopened
+      - unlocked
+  pull_request_review:
+    types:
+      - submitted
+  check_suite:
+    types:
+      - completed
+  status: {}
 
 permissions:
   contents: read
@@ -65,10 +77,11 @@ jobs:
         arguments: build
 
     # 자동 Merge 설정
-    - name: Auto-Merge
-      uses: pascalgn/automerge-action@latest
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+    - id: automerge
+      name: automerge
+      uses: "pascalgn/automerge-action@v0.15.6"
+      env:
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
 #      # 추가
 #      - name: Make zip file #1
