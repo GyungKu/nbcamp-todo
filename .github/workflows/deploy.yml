@@ -66,9 +66,9 @@ jobs:
 
     # 자동 Merge 설정
     - name: Auto-Merge
-      uses: "pascalgn/automerge-action@v0.11.2"
+      uses: pascalgn/automerge-action@v0.11.2
       with:
-        branch: main  # 대상 브랜치
+        branch: main
         token: ${{ secrets.GITHUB_TOKEN }}
 
 #      # 추가
