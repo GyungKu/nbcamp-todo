@@ -24,20 +24,20 @@ jobs:
       with:
         java-version: '17'
         distribution: 'zulu'
+    
+    # Gradle wrapper 파일 실행 권한주기
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew    
+
+    
+    # Gradle test를 실행한다
+    - name: Test with Gradle
+      run: ./gradlew --info test
+    
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
-
-      # Gradle wrapper 파일 실행 권한주기
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
- 
-      # Gradle test를 실행한다
-    - name: Test with Gradle
-      run: ./gradlew --info test
 
 #      # 추가
 #      - name: Make zip file #1
