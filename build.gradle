@@ -82,7 +82,3 @@ jacocoTestCoverageVerification {
 		}
 	}
 }
-
-tasks.withType(Test) {
-	enabled = false
-}
