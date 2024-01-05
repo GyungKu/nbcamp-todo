@@ -74,12 +74,19 @@ jobs:
         arguments: build
 
     # 자동 Merge 설정
-    - id: automerge
-      name: automerge
-      uses: "pascalgn/automerge-action@v0.15.6"
-      env:
-        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        MERGE_LABELS: ""
+  merge:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Merge to main
+        run: git merge --no-ff ${{ github.event.before }} -m "Auto-merge pull request #${{ github.event.number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #      # 추가
 #      - name: Make zip file #1
