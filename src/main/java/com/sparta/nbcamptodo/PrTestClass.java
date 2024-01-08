@@ -8,4 +8,7 @@ public class PrTestClass {
     public void update() {
     }
 
+    public void delete() {
+    }
+
 }
