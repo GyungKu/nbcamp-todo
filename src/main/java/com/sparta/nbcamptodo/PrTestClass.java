@@ -8,4 +8,13 @@ public class PrTestClass {
     public void update() {
     }
 
+    public void delete() {
+    }
+
+    public void get() {
+    }
+
+    public void allGet() {
+    }
+
 }
