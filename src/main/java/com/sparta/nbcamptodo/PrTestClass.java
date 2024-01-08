@@ -11,4 +11,7 @@ public class PrTestClass {
     public void delete() {
     }
 
+    public void get() {
+    }
+
 }
