@@ -14,4 +14,7 @@ public class PrTestClass {
     public void get() {
     }
 
+    public void allGet() {
+    }
+
 }
