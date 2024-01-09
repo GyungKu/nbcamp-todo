@@ -23,7 +23,7 @@ public class CommentController {
     @PostMapping("/todo/{todoId}/comment")
     public ResponseEntity<GlobalResponseDto> createComment(@PathVariable Long todoId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.createComment(todoId, requestDto, userDetails.getUser());
-        System.out.println("PR 테스트22");
+        System.out.println("PR 테스트");
         return ResponseEntity.status(CREATED).body(new GlobalResponseDto("댓글 생성 성공", responseDto));
     }
 
