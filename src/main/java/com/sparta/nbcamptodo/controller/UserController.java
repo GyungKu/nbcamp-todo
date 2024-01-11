@@ -24,6 +24,7 @@ public class UserController {
     @PostMapping("/user/signup")
     public ResponseEntity<GlobalResponseDto> signup(@Valid @RequestBody SignRequestDto requestDto) {
         String message = userService.signup(requestDto);
+        System.out.println("이렇게 테스트를 해본다면?");
         return ResponseEntity.status(CREATED).body(new GlobalResponseDto(message, "succeed signup"));
     }
 
